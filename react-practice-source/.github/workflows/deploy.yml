@@ -1,0 +1,36 @@
+name: Build and Deploy Vite Site
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to deploy repo
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.DEPLOY_PAT }}
+          external_repository: Soorajalipanhwar//react-practice-deploy
+          publish_branch: main
+          publish_dir: ./dist
+          user_name: Your Name
+          user_email: soorajalipanhwar007@email.com
+      - name: Post deployment message
+        run: echo "Deployment completed successfully to https://soorajalipanhwar.github.io/react-practice-deploy/"
